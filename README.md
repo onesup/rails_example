@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Capistrano + Rails4 샘플 프로젝트
 
 ## ssh-key
@@ -88,16 +87,3 @@ ssh 설정이 완료되었다면 서버에 deploy 바로 가능
 
 production, staging 두개의 스테이지를 디폴트로 생성함. 일반 테스트용은 staging으로 서비스용은 production으로 사용하면 될 듯.
 
-
-
-
-
-
-
-
-=======
-rails_example
-=============
-
-Rails4 + Capistrano
->>>>>>> 7e56278ec5ac04c7a2e9e8706f8302db79897efc
