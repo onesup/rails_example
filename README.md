@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Capistrano + Rails4 샘플 프로젝트
 
 ## ssh-key
@@ -94,3 +95,9 @@ production, staging 두개의 스테이지를 디폴트로 생성함. 일반 테
 
 
 
+=======
+rails_example
+=============
+
+Rails4 + Capistrano
+>>>>>>> 7e56278ec5ac04c7a2e9e8706f8302db79897efc
