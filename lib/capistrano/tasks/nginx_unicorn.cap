@@ -59,14 +59,14 @@ namespace :nginx do
   end
   
   desc "Start nginx"
-  task :stop do
+  task :start do
     on roles :web do |host|
       execute :sudo, "/etc/init.d/nginx start"
     end
   end
   
   desc "Restart nginx"
-  task :stop do
+  task :restart do
     on roles :web do |host|
       execute :sudo, "/etc/init.d/nginx restart"
     end
@@ -100,8 +100,42 @@ namespace :unicorn do
     end
   end
   
-  after "deploy:finished", "unicorn:setup"
-  after "deploy:finished", "unicorn:start"
+  after "deploy:finishing", "unicorn:setup"
+  # after "deploy:finished", "unicorn:start"
+end
+
+namespace :assets do
+  desc "Precompile assets on local machine and upload them to the server."
+  task :precompile do
+    on roles :web do |host|
+      run_locally do
+        execute "bundle exec rake assets:precompile"
+        execute "rsync -vr --exclude='.DS_Store' public/assets #{fetch :user}@#{host.hostname}:#{shared_path}/"
+        execute "bundle exec rake assets:clean"
+      end
+      execute :ln, "-fs", "#{shared_path}/assets #{current_path}/public/assets"
+    end
+  end
+  
+  after "deploy:finishing", "assets:precompile"
+end
+
+namespace :db do
+  desc "Create and Migrate DB"
+  task :setup do
+    on roles :db do |host|
+      template "database_yml.erb", "#{release_path}/config/database.yml"
+      
+      # within release_path do
+      #   with rails_env: :product do
+      #     execute "bundle exec rake db:create"
+      #     execute "bundle exec rake db:migrate"
+      #   end
+      # end
+    end
+  end
+  
+  after "deploy:finishing", "db:setup"
 end
 
 

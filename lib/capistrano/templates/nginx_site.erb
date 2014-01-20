@@ -24,6 +24,8 @@ server {
   ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
   ssl_prefer_server_ciphers on;
 <% end %>
+
+  charset     utf-8;
   
   location ~ ^/assets/ {
     gzip_static on;
