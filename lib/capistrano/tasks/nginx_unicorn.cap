@@ -14,24 +14,24 @@ namespace :nginx do
   desc "Setup nginx configuration for this application"
   task :setup do
     on roles :web do |host|
-      conf = template("nginx_conf.erb")
-      p conf
-      execute :sudo, :sh, "-c", "'echo #{conf} > /etc/nginx/nginx.conf'"
+      template "nginx_conf.erb", "/tmp/nginx.conf"
+      execute :sudo, :cp, "/tmp/nginx.conf /etc/nginx/nginx.conf"
+      execute :rm, "/tmp/nginx.conf"
       
-      site = template("nginx_site.erb")
-      p site
-      execute :sudo, :sh, "-c", "'echo #{site} > /etc/nginx/sites-available/#{fetch(:application)}'"
+      template "nginx_site.erb", "/tmp/nginx.#{fetch(:application)}"
+      execute :sudo, :cp, "/tmp/nginx.#{fetch(:application)} /etc/nginx/sites-available/#{fetch(:application)}"
+      execute :rm, "/tmp/nginx.#{fetch(:application)}"
       execute :sudo, :ln, "-fs", "/etc/nginx/sites-available/#{fetch(:application)} /etc/nginx/sites-enabled/#{fetch(:application)}"
       
       if fetch(:nginx_use_ssl)
         if fetch(:nginx_upload_local_certificate)
-          put File.read(fetch(:nginx_ssl_certificate_local_path)), "/tmp/#{fetch(:nginx_ssl_certificate)}"
-          put File.read(fetch(:nginx_ssl_certificate_key_local_path)), "/tmp/#{fetch(:nginx_ssl_certificate_key)}"
+          upload! File.read(fetch(:nginx_ssl_certificate_local_path)), "/tmp/#{fetch(:nginx_ssl_certificate)}"
+          upload! File.read(fetch(:nginx_ssl_certificate_key_local_path)), "/tmp/#{fetch(:nginx_ssl_certificate_key)}"
           
-          excute :sudo, :cp, "/tmp/#{fetch(:nginx_ssl_certificate)} /etc/ssl/certs/#{fetch(:nginx_ssl_certificate)}"
-          excute :sudo, :cp, "/tmp/#{fetch(:nginx_ssl_certificate_key)} /etc/ssl/private/#{fetch(:nginx_ssl_certificate_key)}"
-          excute :rm, "/tmp/#{fetch(:nginx_ssl_certificate)}"
-          excute :rm, "/tmp/#{fetch(:nginx_ssl_certificate_key)}"
+          execute :sudo, :cp, "/tmp/#{fetch(:nginx_ssl_certificate)} /etc/ssl/certs/#{fetch(:nginx_ssl_certificate)}"
+          execute :sudo, :cp, "/tmp/#{fetch(:nginx_ssl_certificate_key)} /etc/ssl/private/#{fetch(:nginx_ssl_certificate_key)}"
+          execute :rm, "/tmp/#{fetch(:nginx_ssl_certificate)}"
+          execute :rm, "/tmp/#{fetch(:nginx_ssl_certificate_key)}"
         end
       end
     end
@@ -50,6 +50,7 @@ end
 
 
 
-def template(template_name)
-  ERB.new(File.open(File.join(current_path, "lib/capistrano/templates", template_name))).result(binding)
+def template(template_name, target)
+  config = File.read(File.join(File.dirname(__FILE__), "../templates", template_name))
+  upload! StringIO.new(ERB.new(config).result(binding)), target
 end
