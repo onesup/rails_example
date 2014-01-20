@@ -85,5 +85,22 @@ ssh 설정이 완료되었다면 서버에 deploy 바로 가능
     cap production deploy
 
 
-production, staging 두개의 스테이지를 디폴트로 생성함. 일반 테스트용은 staging으로 서비스용은 production으로 사용하면 될 듯.
+
+### 2. Multiple Data-Center
+
+기본으로 production, staging 두개의 스테이지를 디폴트로 생성함
+
+테스트용으로 staging를 사용하고,
+서비스용을 데이터센터에 따라 production_korea, production_sfo, production_ny, production_china 등으로 사용하면 될 듯
+
+
+
+
+
+
+
+
+
+
+
 

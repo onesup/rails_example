@@ -1,8 +1,8 @@
 # config valid only for Capistrano 3.1
 lock '3.1.0'
 
-set :application, 'scaffold_rails'
-set :repo_url, 'git@github.com:metacortex/scaffold_rails.git'
+set :application, 'rails_example'
+set :repo_url, 'git@github.com:Tripvi/rails_example.git'
 
 set :scm_user, "metacortex"
 
@@ -10,7 +10,7 @@ set :scm_user, "metacortex"
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/home/deployer"
+set :deploy_to, "/home/deployer/www"
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -36,9 +36,31 @@ set :deploy_to, "/home/deployer"
 # set :rbenv_type, :system
 set :rbenv_ruby, "2.0.0-p353"
 
-
 # Default value for keep_releases is 5
 # set :keep_releases, 5
+
+
+# capistrano-rails options
+
+# If the environment differs from the stage name
+#set :rails_env, 'staging'
+
+# Defaults to 'db'
+#set :migration_role, 'migrator'
+
+# Defaults to [:web]
+set :assets_roles, [:app]
+
+# Defaults to 'assets' this should match config.assets.prefix in your rails config/application.rb
+# set :assets_prefix, 'prepackaged-assets'
+
+# If you need to touch public/images, public/javascripts and public/stylesheets on each deploy:
+set :normalize_asset_timestamps, %{public/images public/javascripts public/stylesheets}
+
+
+# using ForwardAgent
+set :ssh_options, { forward_agent: true }
+
 
 namespace :deploy do
 
