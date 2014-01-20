@@ -95,6 +95,20 @@ ssh 설정이 완료되었다면 서버에 deploy 바로 가능
 
 
 
+## Installation Instruction
+
+1) Gemfile
+
+gem 'capistrano-rails', group: :development
+gem 'capistrano-rbenv', group: :development
+
+2) cap install
+
+3) lib/capistrano 모두 카피
+
+4) config/deploy.rb 카피하고 세팅
+   config/deploy/production.rb 카피하고 세팅 
+
 
 
 
