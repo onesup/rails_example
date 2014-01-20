@@ -2,11 +2,18 @@ namespace :load do
   task :defaults do
     set :nginx_server_name, "web"
     set :nginx_use_ssl, false
-    set :nginx_ssl_certificate, -> { "#{nginx_server_name}.crt" }
-    set :nginx_ssl_certificate_key, -> { "#{nginx_server_name}.key" }
+    set :nginx_ssl_certificate, -> { "#{fetch(:nginx_server_name)}.crt" }
+    set :nginx_ssl_certificate_key, -> { "#{fetch(:nginx_server_name)}.key" }
     set :nginx_upload_local_certificate, true
     set :nginx_ssl_certificate_local_path, -> { Capistrano::CLI.ui.ask "Local path to ssl certificate: " }
     set :nginx_ssl_certificate_key_local_path, -> { Capistrano::CLI.ui.ask "Local path to ssl certificate key: " }
+    
+    set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
+    set :unicorn_config, -> { "#{shared_path}/config/unicorn.rb" }
+    set :unicorn_log, -> { "#{shared_path}/log/unicorn.log" }
+    set :unicorn_user, -> { fetch(:user) }
+    set :unicorn_workers, 3
+    set :unicorn_rack_env, -> { fetch(:rails_env) == 'development' ? 'development' : 'deployment' }
   end
 end
 
@@ -44,10 +51,58 @@ namespace :nginx do
     end
   end
   
-  # after "deploy:finished", "nginx:setup"
-  # after "deploy:finished", "nginx:reload"
+  desc "Stop nginx"
+  task :stop do
+    on roles :web do |host|
+      execute :sudo, "/etc/init.d/nginx stop"
+    end
+  end
+  
+  desc "Start nginx"
+  task :stop do
+    on roles :web do |host|
+      execute :sudo, "/etc/init.d/nginx start"
+    end
+  end
+  
+  desc "Restart nginx"
+  task :stop do
+    on roles :web do |host|
+      execute :sudo, "/etc/init.d/nginx restart"
+    end
+  end
+  
+  after "deploy:finished", "nginx:setup"
+  after "deploy:finished", "nginx:reload"
 end
 
+namespace :unicorn do
+  desc "Setup Unicorn initializer and app configuration"
+  task :setup do
+    on roles :app do |host|
+      execute "mkdir -p #{shared_path}/config"
+      execute "mkdir -p #{shared_path}/tmp/pids"
+      execute "mkdir -p #{shared_path}/log"
+      template "unicorn.rb.erb", fetch(:unicorn_config)
+      template "unicorn_init.erb", "/tmp/unicorn_init"
+      execute "chmod +x /tmp/unicorn_init"
+      execute :sudo, :cp, "/tmp/unicorn_init /etc/init.d/unicorn_#{fetch(:application)}"
+      execute :rm, "/tmp/unicorn_init"
+    end
+  end
+  
+  %w[start stop restart].each do |command|
+    desc "#{command} unicorn"
+    task command do
+      on roles :app  do |host|
+        execute :sudo, "/etc/init.d/unicorn_#{fetch :application} #{command}"
+      end
+    end
+  end
+  
+  after "deploy:finished", "unicorn:setup"
+  after "deploy:finished", "unicorn:start"
+end
 
 
 def template(template_name, target)

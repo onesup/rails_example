@@ -3,14 +3,16 @@ lock '3.1.0'
 
 set :application, 'rails_example'
 set :repo_url, 'git@github.com:Tripvi/rails_example.git'
-
 set :scm_user, "metacortex"
+
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, "/home/deployer/www"
+set :user, "deployer"
+
 
 # Default value for :scm is :git
 # set :scm, :git
