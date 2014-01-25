@@ -11,6 +11,7 @@ namespace :load do
     set :unicorn_pid, -> { "#{shared_path}/tmp/pids/unicorn.pid" }
     set :unicorn_config, -> { "#{shared_path}/config/unicorn.rb" }
     set :unicorn_log, -> { "#{shared_path}/log/unicorn.log" }
+    set :unicorn_error_log, -> { "#{shared_path}/log/unicorn.err.log" }
     set :unicorn_user, -> { fetch(:user) }
     set :unicorn_workers, 3
     set :unicorn_rack_env, -> { fetch(:rails_env) == 'development' ? 'development' : 'deployment' }

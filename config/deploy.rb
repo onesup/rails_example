@@ -34,6 +34,9 @@ set :user, "deployer"
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :default_env, {
+  path: "$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH",
+}
 
 # set :rbenv_type, :system
 set :rbenv_ruby, "2.1.0"
@@ -51,7 +54,7 @@ set :rbenv_ruby, "2.1.0"
 #set :migration_role, 'migrator'
 
 # Defaults to [:web]
-set :assets_roles, [:app]
+set :assets_roles, [:wep]
 
 # Defaults to 'assets' this should match config.assets.prefix in your rails config/application.rb
 # set :assets_prefix, 'prepackaged-assets'
