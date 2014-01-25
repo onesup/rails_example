@@ -2,8 +2,8 @@
 lock '3.1.0'
 
 set :application, 'rails_example'
-set :repo_url, 'git@github.com:Tripvi/rails_example.git'
-set :scm_user, "metacortex"
+set :repo_url, 'git@github.com:onesup/rails_example.git'
+set :scm_user, "onesup"
 
 
 # Default branch is :master
@@ -36,7 +36,7 @@ set :user, "deployer"
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 # set :rbenv_type, :system
-set :rbenv_ruby, "2.0.0-p353"
+set :rbenv_ruby, "2.1.0"
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
