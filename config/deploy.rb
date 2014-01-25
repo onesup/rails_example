@@ -10,7 +10,7 @@ set :scm_user, "onesup"
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
 
 # Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/home/deployer/www"
+set :deploy_to, "/home/deployer/www/rails_example"
 set :user, "deployer"
 
 
@@ -64,7 +64,7 @@ set :normalize_asset_timestamps, %{public/images public/javascripts public/style
 
 
 # using ForwardAgent
-set :ssh_options, { forward_agent: true }
+# set :ssh_options, { forward_agent: true }
 
 
 namespace :deploy do
