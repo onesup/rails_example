@@ -54,7 +54,7 @@ set :rbenv_ruby, "2.1.0"
 #set :migration_role, 'migrator'
 
 # Defaults to [:web]
-set :assets_roles, [:wep]
+set :assets_roles, [:app]
 
 # Defaults to 'assets' this should match config.assets.prefix in your rails config/application.rb
 # set :assets_prefix, 'prepackaged-assets'

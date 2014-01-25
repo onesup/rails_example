@@ -4,7 +4,7 @@ stderr_path "<%= fetch :unicorn_error_log %>"
 stdout_path "<%= fetch :unicorn_log %>"
 
 listen 8000
-# listen '<%= host.hostname %>:8000'
+# listen '<%#= host.hostname %>:8000'
 # listen "/tmp/unicorn.<%= fetch :application %>.sock"
 worker_processes <%= fetch :unicorn_workers %>
 timeout 30
@@ -17,9 +17,9 @@ end
 
 before_fork do |server, worker|
   # Disconnect since the database connection will not carry over
-  if defined? ActiveRecord::Base
-    ActiveRecord::Base.connection.disconnect!
-  end
+  #if defined? ActiveRecord::Base
+  #  ActiveRecord::Base.connection.disconnect!
+  #end
 
   # Quit the old unicorn process
   old_pid = "#{server.config[:pid]}.oldbin"
