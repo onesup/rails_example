@@ -14,7 +14,7 @@
 # Ignore all logfiles and tempfiles.
 /log/*.log
 /tmp
-
+/vendor/bundle
 config/database.yml
 
 /public/assets
