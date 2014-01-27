@@ -1,9 +1,9 @@
 upstream unicorn_<%= fetch :application %> {
   ip_hash;
   <% roles(:app).each do |host| %>
-  server <%= host.hostname %>:8000;
+  # server <%= host.hostname %>:8000;
   <% end %>
-  # server unix:/tmp/unicorn.<%= fetch :application %>.sock fail_timeout=0;
+  server unix:/tmp/.unicorn.<%= fetch :application %>.sock fail_timeout=0;
 }
 
 server {

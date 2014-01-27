@@ -150,6 +150,9 @@ namespace :db do
         with rails_env: :production do
           execute :rake, "db:create"
         end
+        with rails_env: :staging do
+          execute :rake, "db:create"
+        end
       end
     end
   end

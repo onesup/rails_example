@@ -3,9 +3,9 @@ pid "<%= fetch :unicorn_pid %>"
 stderr_path "<%= fetch :unicorn_error_log %>"
 stdout_path "<%= fetch :unicorn_log %>"
 
-listen 8000
-# listen '<%#= host.hostname %>:8000'
-# listen "/tmp/unicorn.<%= fetch :application %>.sock"
+#listen 8000
+<!-- listen '<%= host.hostname %>:8000' -->
+# listen "/tmp/.unicorn.<%= fetch :application %>.sock"
 worker_processes <%= fetch :unicorn_workers %>
 timeout 30
 
