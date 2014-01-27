@@ -5,7 +5,7 @@ stdout_path "<%= fetch :unicorn_log %>"
 
 #listen 8000
 # listen '<%#= host.hostname %>:8000'
-listen "/tmp/.unicorn.<%= fetch :application %>.sock"
+listen "/tmp/unicorn.<%= fetch :application %>.sock"
 worker_processes <%= fetch :unicorn_workers %>
 timeout 30
 

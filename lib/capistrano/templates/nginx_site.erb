@@ -3,7 +3,7 @@ upstream unicorn_<%= fetch :application %> {
   <% roles(:app).each do |host| %>
   # server <%#= host.hostname %>:8000;
   <% end %>
-  server unix:/tmp/.unicorn.<%= fetch :application %>.sock fail_timeout=0;
+  server unix:/tmp/unicorn.<%= fetch :application %>.sock fail_timeout=0;
 }
 
 server {
