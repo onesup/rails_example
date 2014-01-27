@@ -4,7 +4,7 @@ stderr_path "<%= fetch :unicorn_error_log %>"
 stdout_path "<%= fetch :unicorn_log %>"
 
 #listen 8000
-# listen '<%#= host.hostname %>:8000'
+# listen 'eveinno.minivertising.kr'
 listen "/tmp/unicorn.<%= fetch :application %>.sock"
 worker_processes <%= fetch :unicorn_workers %>
 timeout 30
@@ -41,7 +41,7 @@ end
 after_fork do |server, worker|
   # Start up the database connection again in the worker
   if defined?(ActiveRecord::Base)
-    ActiveRecord::Base.establish_connection
+    #ActiveRecord::Base.establish_connection
   end
 
   # if defined?(Resque)
