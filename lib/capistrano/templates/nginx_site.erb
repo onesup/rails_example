@@ -3,7 +3,7 @@ upstream unicorn_<%= fetch :application %> {
 }
 
 server {
-  error_log  /var/log/nginx/error.<%= fetch :application %>.log debug;
+  error_log  /var/log/nginx/error.<%= fetch :application %>.log;
   access_log	/var/log/nginx/access.<%= fetch :application %>.log debug;
   listen 80;
   server_name eveinno.minivertising.kr;
