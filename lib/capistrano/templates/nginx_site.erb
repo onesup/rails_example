@@ -1,32 +1,12 @@
 upstream unicorn_<%= fetch :application %> {
-  ip_hash;
-  <% roles(:app).each do |host| %>
-  # server <%#= host.hostname %>:8000;
-  <% end %>
   server unix:/tmp/unicorn.<%= fetch :application %>.sock fail_timeout=0;
 }
 
 server {
   listen 80;
-  server_name <%= fetch :nginx_server_name %>;
+  server_name eveinno.minivertising.kr;
   root <%= current_path %>/public;
-  
-<% if fetch :nginx_use_ssl %>
-  listen 443;
-  # listen 443 default ssl;
-  # ssl on;
-  ssl_certificate /etc/ssl/certs/<%= fetch :nginx_ssl_certificate %>;
-  ssl_certificate_key /etc/ssl/private/<%= fetch :nginx_ssl_certificate_key %>;
-  
-  ssl_session_timeout  5m;
-  
-  ssl_protocols SSLv2 SSLv3 TLSv1;
-  ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
-  ssl_prefer_server_ciphers on;
-<% end %>
 
-  charset     utf-8;
-  
   location ~ ^/assets/ {
     gzip_static on;
     expires max;
@@ -37,20 +17,31 @@ server {
   location @unicorn_<%= fetch :application %> {
     proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header  X_FORWARDED_PROTO $scheme;
+    proxy_redirect off;
+    proxy_pass http://unicorn_<%= fetch :application %>;    
+
     proxy_set_header  Host $http_host;
-    
     proxy_connect_timeout 3;
     proxy_read_timeout 60;
     proxy_send_timeout 60;
-    
-    proxy_redirect off;
     proxy_max_temp_file_size 0;
-    
-    proxy_pass http://unicorn_<%= fetch :application %>;
   }
+  <% if fetch :nginx_use_ssl %>
+    listen 443;
+    # listen 443 default ssl;
+    # ssl on;
+    ssl_certificate /etc/ssl/certs/<%= fetch :nginx_ssl_certificate %>;
+    ssl_certificate_key /etc/ssl/private/<%= fetch :nginx_ssl_certificate_key %>;
+  
+    ssl_session_timeout  5m;
+  
+    ssl_protocols SSLv2 SSLv3 TLSv1;
+    ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+    ssl_prefer_server_ciphers on;
+  <% end %>
   
   client_max_body_size 100M;
-  
+  charset     utf-8;  
   # error_page 500 502 504 /500.html;
   # error_page 503 @503;
 
