@@ -1,13 +1,23 @@
-working_directory "/Users/daul/projects/rails_example"
+working_directory "<%= current_path %>"
+pid "<%= fetch :unicorn_pid %>"
+stderr_path "<%= fetch :unicorn_error_log %>"
+stdout_path "<%= fetch :unicorn_log %>"
 
-# listen 8000
+#listen 8000
 # listen 'eveinno.minivertising.kr'
-# listen "/tmp/unicorn.rails_example.sock"
-worker_processes 3
+listen "/tmp/unicorn.<%= fetch :application %>.sock"
+worker_processes <%= fetch :unicorn_workers %>
 timeout 30
 
 preload_app true
 
 before_exec do |server|
-  ENV["BUNDLE_GEMFILE"] = "/home/deployer/www/rails_example/current/Gemfile"
+  ENV["BUNDLE_GEMFILE"] = "<%= current_path %>/Gemfile"
+end
+
+before_fork do |server, worker|
+
+end
+
+after_fork do |server, worker|
 end
